@@ -12,7 +12,7 @@ headers = {
     "Authorization": f"Bearer {API_KEY}"  # Ensure Bearer prefix
 }
 
-payload = {"query": q.strive_query, "variables": q.strive_variables}
+payload = q.tourney_list_query(q.STRIVE, period = q.SEVEN_DAYS)
 # start.gg api endpoint
 url = "https://api.start.gg/gql/alpha"
 
