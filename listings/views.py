@@ -1,0 +1,40 @@
+from django.shortcuts import render
+
+# Create your views here.
+from django.shortcuts import render
+from django.http import HttpRequest
+from datetime import datetime, timedelta
+
+# Import your API (e.g., import api.queries as queries)
+
+def tournament_list(request: HttpRequest):
+    selected_game = request.POST.get('game', 'Guilty Gear Strive')
+    selected_location = request.POST.get('location', 'both')
+    selected_date_str = request.POST.get('date', datetime.now().date().isoformat())
+
+    selected_date = datetime.fromisoformat(selected_date_str).date()
+    after_date = int(datetime.combine(selected_date, datetime.min.time()).timestamp())
+    before_date = after_date + 604800
+
+    game_ids = {
+        'Guilty Gear Strive': [411],
+        'Tekken 8': [49783],
+        'Street Fighter 6': [43868],
+    }.get(selected_game, [])
+
+    # Replace mock with your API call (e.g., tournaments = queries.your_function(game_ids, after_date, before_date))
+    tournaments = [
+        {'name': 'Sample Tourney 1', 'startAt': 1753920000, 'isOnline': True},
+        {'name': 'Sample Tourney 2', 'startAt': 1754006400, 'isOnline': False},
+    ]
+
+    for t in tournaments:
+        t['formatted_date'] = datetime.fromtimestamp(t['startAt']).strftime('%Y-%m-%d %H:%M')
+
+    context = {
+        'tournaments': tournaments,
+        'selected_game': selected_game,
+        'selected_location': selected_location,
+        'selected_date': selected_date_str,
+    }
+    return render(request, 'main.html', context)

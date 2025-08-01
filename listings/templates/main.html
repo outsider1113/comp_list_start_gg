@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Listings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Tournament Listings</h1>
+    </header>
+    <div class="filter-bar">
+        <form method="post" action="">
+            {% csrf_token %}
+            <select name="game" class="game-select">
+                <option value="Guilty Gear Strive" {% if selected_game == 'Guilty Gear Strive' %}selected{% endif %}>Guilty Gear Strive</option>
+                <option value="Tekken 8" {% if selected_game == 'Tekken 8' %}selected{% endif %}>Tekken 8</option>
+                <option value="Street Fighter 6" {% if selected_game == 'Street Fighter 6' %}selected{% endif %}>Street Fighter 6</option>
+            </select>
+            <select name="location" class="location-select">
+                <option value="online" {% if selected_location == 'online' %}selected{% endif %}>Online</option>
+                <option value="offline" {% if selected_location == 'offline' %}selected{% endif %}>Offline</option>
+                <option value="both" {% if selected_location == 'both' %}selected{% endif %}>Both</option>
+            </select>
+            <input type="date" name="date" class="date-picker" value="{{ selected_date }}">
+            <button type="submit" class="submit-btn">Filter</button>
+        </form>
+    </div>
+    <div class="tournament-list">
+        {% if tournaments %}
+            {% for tournament in tournaments %}
+                <div class="tournament-card">
+                    <h2>{{ tournament.name }}</h2>
+                    <p>Date: {{ tournament.formatted_date }}</p>
+                    <p>Location: {% if tournament.isOnline %}Online{% else %}Offline{% endif %}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No tournaments found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
