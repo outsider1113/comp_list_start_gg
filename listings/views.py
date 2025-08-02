@@ -1,11 +1,11 @@
 from django.shortcuts import render
 
-# Create your views here.
+
 from django.shortcuts import render
 from django.http import HttpRequest
 from datetime import datetime, timedelta
 
-# Import your API (e.g., import api.queries as queries)
+
 
 def tournament_list(request: HttpRequest):
     selected_game = request.POST.get('game', 'Guilty Gear Strive')
@@ -22,7 +22,7 @@ def tournament_list(request: HttpRequest):
         'Street Fighter 6': [43868],
     }.get(selected_game, [])
 
-    # Replace mock with your API call (e.g., tournaments = queries.your_function(game_ids, after_date, before_date))
+    # placeholders
     tournaments = [
         {'name': 'Sample Tourney 1', 'startAt': 1753920000, 'isOnline': True},
         {'name': 'Sample Tourney 2', 'startAt': 1754006400, 'isOnline': False},
