@@ -4,7 +4,11 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.http import HttpRequest
 from datetime import datetime, timedelta
-from api import api
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from api.api import * 
 
 
 def tournament_list(request: HttpRequest):
@@ -23,10 +27,16 @@ def tournament_list(request: HttpRequest):
     }.get(selected_game, [])
 
     # placeholders
-    tournaments = [
-        {'name': 'Sample Tourney 1', 'startAt': 1753920000, 'isOnline': True},
-        {'name': 'Sample Tourney 2', 'startAt': 1754006400, 'isOnline': False},
-    ]
+
+    data = start_tourneys()
+    tournaments = []
+    for i in data:
+        tourn = {'name' : i['name'], 'startAt' : int(i['startAt']), 'isOnline' : True}
+        tournaments.append(tourn)
+    # tournaments = [
+    #     {'name': 'Sample Tourney 1', 'startAt': 1753920000, 'isOnline': True},
+    #     {'name': 'Sample Tourney 2', 'startAt': 1754006400, 'isOnline': False},
+    # ]
 
     for t in tournaments:
         t['formatted_date'] = datetime.fromtimestamp(t['startAt']).strftime('%Y-%m-%d %H:%M')
