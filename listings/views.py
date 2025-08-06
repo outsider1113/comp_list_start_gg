@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.http import HttpRequest
 from datetime import datetime, timedelta
-
+from api import api
 
 
 def tournament_list(request: HttpRequest):

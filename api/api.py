@@ -6,7 +6,7 @@ import json
 import queries as q
 
 API_KEY = os.environ.get('startAPI')
-
+print(API_KEY)
 headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {API_KEY}"  # Ensure Bearer prefix
