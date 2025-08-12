@@ -2,7 +2,9 @@ import cloudscraper
 import json
 import time
 from datetime import datetime
-
+from urllib.parse import urljoin
+from bs4 import BeautifulSoup
+import re
 # CLOUDFLAREREERERER
 def scrape_tournaments(game_id='231004', per_page=5, max_pages=1):
     tournaments = []
@@ -38,5 +40,28 @@ def scrape_tournaments(game_id='231004', per_page=5, max_pages=1):
     
     return tournaments
 
-results = scrape_tournaments()
-print(json.dumps(results, indent=4)) 
+# results = scrape_tournaments()
+# print(json.dumps(results, indent=4)) 
+
+
+def scrape_single(url,max_pages = 1):
+    scraper = cloudscraper.create_scraper()  
+    current_date = datetime.now() #for later checking reg time
+
+    page = 1
+    while page <= max_pages:
+        response = scraper.get(url)
+        
+        if response.status_code == 200:
+            data = response.content
+            page += 1
+        else:
+            print(f"Error on page {page}: {response.status_code} - {response.text}")
+            page+=1
+            return
+    #class="text start-time"
+    soup = BeautifulSoup(data,'html.parser').find(class_=re.compile('tournament-description')).get_text() #getting description to determine if online
+    print(soup)
+    return
+
+scrape_single('https://challonge.com/TWTOT129')
