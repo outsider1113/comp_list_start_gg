@@ -3,7 +3,7 @@
 import os
 import requests
 import json
-import queries as q  
+from . import queries as q  
 
 API_KEY = os.environ.get('startAPI')
 
@@ -32,7 +32,7 @@ def start_tourneys():
         else:
             # json format
             result = data['data']['tournaments']['nodes']
-            print(result)
+            #print(result)
             return result
 
     except requests.exceptions.HTTPError as http_err:
@@ -42,9 +42,6 @@ def start_tourneys():
     except requests.exceptions.RequestException as req_err:
         print(f"Request Error: {req_err}")
         return req_err
-
-
-start_tourneys()
 # data = start_tourneys()
 # for i in data:
 #     print(i['name'])
@@ -84,3 +81,6 @@ start_tourneys()
 #     print(f"Response: {response.text}")
 # except requests.exceptions.RequestException as req_err:
 #     print(f"Request Error: {req_err}")
+
+if __name__ == "__main__":
+    start_tourneys()

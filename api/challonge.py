@@ -73,9 +73,10 @@ def scrape_single(url,max_pages = 1):
             return
     #class="text start-time"
     #sometimes on rare cases cloudscraper loads a page with a small description so we only pull the first class with tournamanet description in it
-    soup = BeautifulSoup(data,'html.parser').find(class_=re.compile('tournament-description')).get_text() #getting description to determine if online 
-    
-    print(soup)
+    soup = BeautifulSoup(data,'html.parser') #getting description to determine if online 
+    description = soup.find(class_=re.compile('tournament-description')).get_text()
+
+    print(description)
     return
 
 #scrape_single('https://challonge.com/TWTOT129')

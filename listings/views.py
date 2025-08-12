@@ -16,9 +16,9 @@ def tournament_list(request: HttpRequest):
     selected_location = request.POST.get('location', 'both')
     selected_date_str = request.POST.get('date', datetime.now().date().isoformat())
 
-    selected_date = datetime.fromisoformat(selected_date_str).date()
-    after_date = int(datetime.combine(selected_date, datetime.min.time()).timestamp())
-    before_date = after_date + 604800
+    # selected_date = datetime.fromisoformat(selected_date_str).date()
+    # after_date = int(datetime.combine(selected_date, datetime.min.time()).timestamp())
+    # before_date = after_date + 604800
 
     game_ids = {
         'Guilty Gear Strive': [411],
