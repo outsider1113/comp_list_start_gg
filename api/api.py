@@ -43,6 +43,8 @@ def start_tourneys():
         print(f"Request Error: {req_err}")
         return req_err
 
+
+start_tourneys()
 # data = start_tourneys()
 # for i in data:
 #     print(i['name'])

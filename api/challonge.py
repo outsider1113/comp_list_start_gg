@@ -18,7 +18,7 @@ Pipeline should be:
 * sort before caching or sort after? investigate sql query time
 """
 # CLOUDFLAREREERERER
-def scrape_tournaments(game_id='231004', per_page=5, max_pages=1):
+def scrape_tournaments(game_id='231004', per_page=20, max_pages=1):
     tournaments = []
     scraper = cloudscraper.create_scraper()  
     
@@ -36,13 +36,13 @@ def scrape_tournaments(game_id='231004', per_page=5, max_pages=1):
             for tournament in data['collection']:
                 details = tournament.get('details', [])
                 created_date_str = details[3].get('text') if len(details) > 3 else 'N/A'
-                participants_str = details[1].get('text') if len(details) > 1 else 'N/A'
-                
+                link = tournament.get('link', 'N/A')
+                t_id = link.rsplit('/',1)[-1]
                 tournaments.append({
                     'name': tournament.get('name', 'N/A'),
                     'created_date': created_date_str,
-                    'link': tournament.get('link', 'N/A'),
-                    'participants': participants_str
+                    'link': link,
+                    'id': t_id
                 })
             page += 1
             time.sleep(1.5)  # Rate limit (maybe make longer if saving info in DB)
@@ -52,8 +52,8 @@ def scrape_tournaments(game_id='231004', per_page=5, max_pages=1):
     
     return tournaments
 
-# results = scrape_tournaments()
-# print(json.dumps(results, indent=4)) 
+results = scrape_tournaments()
+print(json.dumps(results, indent=4)) 
 
 
 def scrape_single(url,max_pages = 1):
@@ -78,4 +78,8 @@ def scrape_single(url,max_pages = 1):
     print(soup)
     return
 
-scrape_single('https://challonge.com/TWTOT129')
+#scrape_single('https://challonge.com/TWTOT129')
+
+
+def get_info():
+    pass
