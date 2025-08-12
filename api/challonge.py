@@ -5,6 +5,18 @@ from datetime import datetime
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import re
+
+
+"""
+Pipeline should be:
+- get tournamnet listings for past 7 days
+- cache tournament names and url, use end of url as unique ID
+- if new to sql database run the tournamnet page scraper
+- use soup to get description and start time
+- run slm or just basic hueristic word detections (look at more pages)
+
+* sort before caching or sort after? investigate sql query time
+"""
 # CLOUDFLAREREERERER
 def scrape_tournaments(game_id='231004', per_page=5, max_pages=1):
     tournaments = []
@@ -60,7 +72,9 @@ def scrape_single(url,max_pages = 1):
             page+=1
             return
     #class="text start-time"
-    soup = BeautifulSoup(data,'html.parser').find(class_=re.compile('tournament-description')).get_text() #getting description to determine if online
+    #sometimes on rare cases cloudscraper loads a page with a small description so we only pull the first class with tournamanet description in it
+    soup = BeautifulSoup(data,'html.parser').find(class_=re.compile('tournament-description')).get_text() #getting description to determine if online 
+    
     print(soup)
     return
 
