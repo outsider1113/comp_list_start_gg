@@ -3,6 +3,7 @@ import os, sys
 from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from api.api import start_tourneys
+from api import challonge as ch
 # from api import challonge
 
 from datetime import datetime, timedelta
@@ -12,6 +13,15 @@ load_dotenv('../testing.env')
 #conn and cur using env
 conn = pg.connect(host= os.getenv('host'), dbname = os.getenv('dbname'), user = os.getenv('user'), password = os.getenv('password'), port = os.getenv('port'))
 cur = conn.cursor()
+
+
+
+insert_sql = """--sql
+        INSERT INTO tourneys (id, name, time, url, isonline, checked)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        ON CONFLICT (id) DO NOTHING;
+    """## should stay the same format always
+
 
 cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS tourneys (
@@ -27,11 +37,7 @@ conn.commit()
 
 def startgg_check():
     start_data = start_tourneys()  # expects a list of dicts
-    insert_sql = """--sql
-        INSERT INTO tourneys (id, name, time, url, isonline, checked)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        ON CONFLICT (id) DO NOTHING;
-    """
+
     for i in start_data:
         tid = str(i['id'])  # ensure string to match VARCHAR column type
         name = i['name']
@@ -44,11 +50,19 @@ def startgg_check():
     conn.commit()
 
 def challonge_check():
-    pass
-
+    ch_data = ch.scrape_tournaments()
+    for i in ch_data:
+        tid = i['id']
+        name = i['name']
+        time_str = 'N/A' #default
+        url = i['link']
+        isonline = False #default
+        checked = False #default
+        cur.execute(insert_sql, (tid, name, time_str, url, isonline, checked))
+    conn.commit()
 
 startgg_check()
-
+challonge_check()
 
 cur.close()
 conn.close()

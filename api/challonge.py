@@ -18,7 +18,7 @@ Pipeline should be:
 * sort before caching or sort after? investigate sql query time
 """
 # CLOUDFLAREREERERER
-def scrape_tournaments(game_id='231004', per_page=20, max_pages=1):
+def scrape_tournaments(game_id='231004', per_page=5, max_pages=1):
     tournaments = []
     scraper = cloudscraper.create_scraper()  
     
@@ -35,12 +35,11 @@ def scrape_tournaments(game_id='231004', per_page=20, max_pages=1):
                 break
             for tournament in data['collection']:
                 details = tournament.get('details', [])
-                created_date_str = details[3].get('text') if len(details) > 3 else 'N/A'
+                # created_date_str = details[3].get('text') if len(details) > 3 else 'N/A'
                 link = tournament.get('link', 'N/A')
                 t_id = link.rsplit('/',1)[-1]
                 tournaments.append({
                     'name': tournament.get('name', 'N/A'),
-                    'created_date': created_date_str,
                     'link': link,
                     'id': t_id
                 })
@@ -52,8 +51,8 @@ def scrape_tournaments(game_id='231004', per_page=20, max_pages=1):
     
     return tournaments
 
-results = scrape_tournaments()
-print(json.dumps(results, indent=4)) 
+# results = scrape_tournaments()
+# print(json.dumps(results, indent=4)) 
 
 
 def scrape_single(url,max_pages = 1):
@@ -84,3 +83,5 @@ def scrape_single(url,max_pages = 1):
 
 def get_info():
     pass
+
+
